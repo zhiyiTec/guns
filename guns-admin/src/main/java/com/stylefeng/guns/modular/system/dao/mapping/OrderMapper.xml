@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.stylefeng.guns.modular.system.dao.OrderMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap"
+		type="com.stylefeng.guns.modular.system.model.Order">
+		<id column="id" property="id" />
+		<result column="order_name" property="orderName" />
+		<result column="order_time" property="orderTime" />
+	</resultMap>
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		id, order_name AS orderName, order_time AS orderTime
+	</sql>
+	<insert id="addOrder" parameterType="com.stylefeng.guns.modular.system.model.Order">
+   insert into zx_order(id, order_name,order_time) values(#{id}, #{orderName},#{orderTime})
+</insert>
+
+</mapper>

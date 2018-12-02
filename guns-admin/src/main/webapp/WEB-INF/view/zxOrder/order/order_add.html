@@ -1,0 +1,107 @@
+@layout("/common/_container.html"){
+<link rel="stylesheet" 	href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+ <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script src="http://www.veryhuo.com/uploads/Common/js/jQuery.md5.js"></script>
+<script src="${ctxPath}/static/modular/zxOrder/order/order_info.js"></script>
+<script src="https://cdn.bootcss.com/bootbox.js/4.4.0/bootbox.js"></script>
+<div class="ibox float-e-margins">
+	<div class="ibox-content">
+		<div class="form-horizontal">
+
+			<input type="hidden" id="id" value="">
+
+			<div class="row">
+				<div class="col-sm-6 b-r">
+
+					<#input id="orderName" name="订单名" />
+				</div>
+
+
+			</div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-10">
+					<#button btnCss="info" name="提交" id="ensure" icon="fa-check"
+						/>
+					<#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser"
+						clickFun="OrderInfoDlg.close()" />
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<script>
+var orderName;
+$("#ensure").click(function() {
+			 orderName=$("#orderName").val();
+			bootbox.confirm({
+				size:"small",
+                message: "确认添加【"+orderName+"】这条订单?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function(result) {
+                   if(result==true){
+                	   count(3);
+                	   var dialog = bootbox.dialog({
+                           title: '订单正在处理，请稍等...',
+                           message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
+                       });
+                	  
+                       dialog.init(function() {
+                           setTimeout(function() {
+                               dialog.find('.bootbox-body').html('success');
+                           }, 2000);
+                       });
+                     
+                   }else{
+                	   bootbox.alert("您已经取消订单");
+                   }
+                }
+            });
+		});
+		var count = (function() {
+            var timer;
+            var i = 0;
+            function change(tar) {
+
+                i++;
+                if (i >= tar) {
+                	 $.ajax({
+           				url : "http://localhost:1234/order/add",
+           				type : "GET",
+           				data : "orderName=" + orderName,
+           				success : function(data) {
+           					Feng.success("添加成功!");
+           			        window.parent.Order.table.refresh();
+           			        OrderInfoDlg.close();
+           				},
+           			error:function(){
+           				 Feng.error("修改失败!" + data.responseJSON.message + "!");
+           			}
+           			}); 
+                }
+                console.log(i);
+                if (i === tar) {
+                    clearTimeout(timer);
+                    return false;
+                }
+                timer = setTimeout(function() {
+                    change(tar)
+                }, 1000)
+
+            }
+            return change;
+        })()
+</script>
+@}

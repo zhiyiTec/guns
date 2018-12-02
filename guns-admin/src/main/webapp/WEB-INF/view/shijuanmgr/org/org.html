@@ -1,0 +1,38 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>组织机构管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#NameCon id="condition" name="组织机构名称" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#button name="搜索" icon="fa-search" clickFun="Org.search()"/>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="OrgTableToolbar" role="group">
+                            @if(shiro.hasPermission("/org/add")){
+                                <#button name="添加" icon="fa-plus" clickFun="Org.openAddOrg()"/>
+                            @}
+                            @if(shiro.hasPermission("/org/update")){
+                                <#button name="修改" icon="fa-edit" clickFun="Org.openOrgDetail()" space="true"/>
+                            @}
+                            @if(shiro.hasPermission("/org/delete")){
+                                <#button name="删除" icon="fa-remove" clickFun="Org.delete()" space="true"/>
+                            @}
+                        </div>
+                        <#table id="OrgTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/shijuanmgr/org/org.js"></script>
+@}
